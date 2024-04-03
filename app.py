@@ -48,44 +48,58 @@ else:
 
     data_item = search_surname_and_get_dict(data, target_surname)
 
-    st.header(f'Apellido "{target_surname}"')
+    if data_item:
+        st.header(f'Apellido "{target_surname}"')
 
-    _, col_img, col_txt, _ = st.columns([1, 1, 2, 2])
-    col_img.image(
-        "https://static.streamlit.io/examples/dog.jpg",
-        use_column_width='auto')
-    col_txt.markdown(f'''
-        ### Más *{target_surname}*:gray[s]
+        _, col_img, col_txt, _ = st.columns([1, 1, 2, 2])
+        col_img.image(
+            "https://static.streamlit.io/examples/dog.jpg",
+            use_column_width='auto')
+        col_txt.markdown(f'''
+            ### Más *{target_surname}*:gray[s]
 
-        ¿Sabías que en el país
-        **:red[hay {data_item['n_arg']}] :orange[personas]** :green[que] :blue[también]
-        :violet[se] :gray[llaman] :rainbow[como vos]? :balloon:
+            ¿Sabías que en el país
+            **:red[hay {data_item['n_arg']}] :orange[personas]** :green[que] :blue[también]
+            :violet[se] :gray[llaman] :rainbow[como vos]? :balloon:
 
-    ''')
+        ''')
 
-    st.markdown("~~~")   
-    _, col_txt, col_img, _ = st.columns([2, 2, 1, 1])
-    col_txt.markdown(f'''
-        ### Procedencia
+        st.markdown("~~~")   
+        _, col_txt, col_img, _ = st.columns([2, 2, 1, 1])
+        col_txt.markdown(f'''
+            ### Procedencia
 
-        ¿Sabías que tu apellido
-        es de origen **:rainbow[{data_item['origin']}]**?
+            ¿Sabías que tu apellido
+            es de origen **:rainbow[{data_item['origin']}]**?
 
-    ''')
-    col_img.image("https://static.streamlit.io/examples/dog.jpg")
+        ''')
+        col_img.image("https://static.streamlit.io/examples/dog.jpg")
 
-    st.markdown("~~~")
-    _, col_img, col_txt, _ = st.columns([1, 1, 3, 1])
-    col_img.image("https://static.streamlit.io/examples/dog.jpg")
-    col_txt.markdown(f'''
-        ### Regionalidad
+        st.markdown("~~~")
+        _, col_img, col_txt, _ = st.columns([1, 1, 3, 1])
+        col_img.image("https://static.streamlit.io/examples/dog.jpg")
+        col_txt.markdown(f'''
+            ### Regionalidad
 
-        ¿Sabías que la mayoría de la gente que tiene tu mismo apellido
-        vive en **:blue[{data_item['province_most_people']}]**?
+            ¿Sabías que la mayoría de la gente que tiene tu mismo apellido
+            vive en **:blue[{data_item['province_most_people']}]**?
 
-    ''')
+        ''')
 
-    st.markdown("~~~")
+        st.markdown("~~~")
+    
+    else:
+        st.markdown(
+            """
+            ### :(
+
+            No encontramos tu apellido en nuestra base de datos.
+
+            Lo buscamos en el padrón electoral del año 2021.
+
+            Existe la posibilidad de que hayamos perdido el apellido debido a nuestro proceso de limpieza de datos.
+
+        """)
 
     _, col1 = st.columns([5, 1])
 
