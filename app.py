@@ -45,27 +45,28 @@ else:
     data_load_state.text("")
 
     target_surname = st.session_state.surname
+    target_surname = target_surname.strip()
 
     data_item = search_surname_and_get_dict(data, target_surname)
 
     if data_item:
         st.header(f'Apellido "{target_surname}"')
 
-        _, col_img, col_txt, _ = st.columns([1, 1, 2, 2])
+        col_img, col_txt, _ = st.columns([2, 2, 2])
         col_img.image(
-            "https://static.streamlit.io/examples/dog.jpg",
+            "static/same-surname.jpg",
             use_column_width='auto')
         col_txt.markdown(f'''
             ### Más *{target_surname}*:gray[s]
 
             ¿Sabías que en el país
-            **:red[hay {data_item['n_arg']}] :orange[personas]** :green[que] :blue[también]
+            **:red[hay {data_item['n_arg']:,}] :orange[personas]** :green[que] :blue[también]
             :violet[se] :gray[llaman] :rainbow[como vos]? :balloon:
 
         ''')
 
         st.markdown("~~~")   
-        _, col_txt, col_img, _ = st.columns([2, 2, 1, 1])
+        _, col_txt, col_img = st.columns([2, 2, 2])
         col_txt.markdown(f'''
             ### Procedencia
 
@@ -73,11 +74,11 @@ else:
             es de origen **:rainbow[{data_item['origin']}]**?
 
         ''')
-        col_img.image("https://static.streamlit.io/examples/dog.jpg")
+        col_img.image("static/procedence.jpg")
 
         st.markdown("~~~")
         _, col_img, col_txt, _ = st.columns([1, 1, 3, 1])
-        col_img.image("https://static.streamlit.io/examples/dog.jpg")
+        col_img.image("static/provinces.jpg")
         col_txt.markdown(f'''
             ### Regionalidad
 
@@ -87,7 +88,7 @@ else:
         ''')
 
         st.markdown("~~~")
-    
+
     else:
         st.markdown(
             """
