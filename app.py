@@ -2,16 +2,20 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-st.title("¿Cuál es tu apellido?")
 
-st.text_input("Tu apellido", key="surname")
+if not "surname" in st.session_state:
+    
+    st.title("¿Cuál es tu apellido?")
 
-input_surname = st.session_state.surname
-if input_surname:
-    st.write(f'Buscando "{input_surname}"...')
+    st.text_input("Tu apellido", key="surname")
 
 
-# ¿Sabías que en el país hay 24753 personas que también se llaman como vos?
-
-# ¿Sabías que tu apellido es de origen español?
-# ¿Sabías que la mayoría de la gente que tiene tu mismo apellido vive en Entre Rios?
+else:
+    
+    st.write(f'Apellido "{st.session_state.surname}"')
+    
+    st.write(f'¿Sabías que en el país hay 24753 personas que también se llaman como vos?')
+    
+    st.write(f'¿Sabías que tu apellido es de origen español?')
+    
+    st.write(f'¿Sabías que la mayoría de la gente que tiene tu mismo apellido vive en Entre Rios?')
