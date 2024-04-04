@@ -3,6 +3,8 @@ import pandas
 import numpy as np
 
 
+ARG_TOTAL_POP = 34_328_954
+
 @st.cache_data
 def load_data():
     data = pandas.DataFrame({
@@ -18,8 +20,6 @@ def load_data():
 
 
 def search_surname_and_get_dict(df, target_surname):
-
-    target_surname = target_surname.upper()
 
     try:
         indice = df.index[df['surname'] == target_surname].tolist()[0]
@@ -46,13 +46,17 @@ else:
 
     target_surname = st.session_state.surname
     target_surname = target_surname.strip()
+    target_surname = target_surname.upper()
 
     data_item = search_surname_and_get_dict(data, target_surname)
 
     if data_item:
+
+        surname_pop_percentage = data_item['n_arg'] * 100 / ARG_TOTAL_POP
+
         st.header(f'Apellido "{target_surname}"')
 
-        col_img, col_txt, _ = st.columns([2, 2, 2])
+        col_img, col_txt = st.columns([2, 2])
         col_img.image(
             "static/same-surname.jpg",
             use_column_width='auto')
@@ -60,13 +64,17 @@ else:
             ### Más *{target_surname}*:gray[s]
 
             ¿Sabías que en el país
-            **:red[hay {data_item['n_arg']:,}] :orange[personas]** :green[que] :blue[también]
-            :violet[se] :gray[llaman] :rainbow[como vos]? :balloon:
+            **:red[hay {data_item['n_arg']:,}] :orange[personas]** :green[que]
+            :blue[también] :violet[se] :gray[llaman] :rainbow[como vos]?
+            :balloon:
 
+
+            Este número, representa el **{surname_pop_percentage:0.2}%**
+            de la población.
         ''')
 
         st.markdown("~~~")   
-        _, col_txt, col_img = st.columns([2, 2, 2])
+        col_txt, col_img = st.columns([2, 2])
         col_txt.markdown(f'''
             ### Procedencia
 
@@ -77,7 +85,7 @@ else:
         col_img.image("static/procedence.jpg")
 
         st.markdown("~~~")
-        _, col_img, col_txt, _ = st.columns([1, 1, 3, 1])
+        _, col_img, col_txt, _ = st.columns([1, 1, 1, 1])
         col_img.image("static/provinces.jpg")
         col_txt.markdown(f'''
             ### Regionalidad
@@ -98,7 +106,8 @@ else:
 
             Lo buscamos en el padrón electoral del año 2021.
 
-            Existe la posibilidad de que hayamos perdido el apellido debido a nuestro proceso de limpieza de datos.
+            Existe la posibilidad de que hayamos perdido el apellido debido
+            a nuestro proceso de limpieza de datos.
 
         """)
 
