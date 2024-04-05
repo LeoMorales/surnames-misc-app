@@ -56,7 +56,7 @@ def show_surname_n_block(target_surname, n_surname):
         la de la población argentina (menos de 0.001%).]'''
     else:
         txt = f'''
-            Este número, representa el **{surname_pop_percentage:0.2}%**
+            Este número representa el **{surname_pop_percentage:0.2}%**
             de la población argentina.
         '''
     col_txt.markdown(txt)
