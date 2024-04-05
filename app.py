@@ -1,9 +1,9 @@
 import streamlit as st
 import pandas
-import numpy as np
 
 
 ARG_TOTAL_POP = 34_328_954
+
 
 @st.cache_data
 def load_data():
@@ -32,6 +32,8 @@ def search_surname_and_get_dict(df, target_surname):
 
 
 def show_surname_n_block(target_surname, n_surname):
+    "Muestra el bloque con el resumen de cantidades del apellido"
+
     surname_pop_percentage = n_surname * 100 / ARG_TOTAL_POP
 
     col_img, col_txt = st.columns([2, 2])
@@ -61,6 +63,8 @@ def show_surname_n_block(target_surname, n_surname):
 
 
 def show_surname_origin_block(surname_origin):
+    "Muestra el bloque con el resumen del origen"
+
     col_txt, col_img = st.columns([2, 2])
 
     if surname_origin == '-':
@@ -92,7 +96,10 @@ def show_surname_incidence_block(
         province_most_surname_incidence,
         province_most_surname_incidence_value,
 ):
+    "Muestra el bloque con el resumen de incidencia del apellido"
+
     incidence_value = round(province_most_surname_incidence_value * 1_000)
+
     _, col_img, col_txt = st.columns([1, 1, 2])
     col_img.image("static/provinces.jpg")
     col_txt.markdown(f'''
