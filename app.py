@@ -31,9 +31,100 @@ def search_surname_and_get_dict(df, target_surname):
         return {}
 
 
+def show_surname_n_block(target_surname, n_surname):
+    surname_pop_percentage = n_surname * 100 / ARG_TOTAL_POP
+
+    col_img, col_txt = st.columns([2, 2])
+    col_img.image(
+        "static/same-surname.jpg",
+        use_column_width='auto')
+    txt = f'''
+        ### Más *{target_surname}*:gray[s]
+
+        ¿Sabías que en el país
+        **:red[hay {n_surname:,}] :orange[personas]** :green[que]
+        :blue[también] :violet[se] :gray[llaman] :rainbow[como vos]?
+        :balloon:
+
+    '''
+    col_txt.markdown(txt)
+
+    if surname_pop_percentage < 0.001:
+        txt = ''':gray[Este número, representa un porcentaje *muy* bajito de
+        la de la población argentina (menos de 0.001%).]'''
+    else:
+        txt = f'''
+            Este número, representa el **{surname_pop_percentage:0.2}%**
+            de la población argentina.
+        '''
+    col_txt.markdown(txt)
+
+
+def show_surname_origin_block(surname_origin):
+    col_txt, col_img = st.columns([2, 2])
+
+    if surname_origin == '-':
+        col_txt.markdown('''
+            ### Procedencia
+
+            No hemos encontrado el origen de tu apellido en
+            nuestras bases de datos.
+
+            Estas listas están confeccionadas con diversas fuentes 
+            geolinguísticas y se actualizan año a año!
+
+        ''')
+    else:
+        col_txt.markdown(f'''
+            ### Procedencia
+
+            ¿Sabías que tu apellido
+            es de origen **:rainbow[{surname_origin}]**?
+
+        ''')
+
+    col_img.image("static/procedence.jpg")
+
+
+def show_surname_incidence_block(
+        province_most_people,
+        province_most_people_value,
+        province_most_surname_incidence,
+        province_most_surname_incidence_value,
+):
+    incidence_value = round(province_most_surname_incidence_value * 1_000)
+    _, col_img, col_txt = st.columns([1, 1, 2])
+    col_img.image("static/provinces.jpg")
+    col_txt.markdown(f'''
+        ### Regionalidad
+
+        ¿Sabías que la mayoría de la gente que tiene tu mismo apellido
+        vive en **:blue[{province_most_people}]**?
+        *:grey[({province_most_people_value:,} personas)]*
+
+    ''')
+    if incidence_value == 0:
+        return
+
+    if province_most_people_value == province_most_surname_incidence:
+        col_txt.markdown(f'''
+
+            *:grey[({incidence_value} de cada 1000 personas)]*
+
+        ''')
+    else:
+        col_txt.markdown(f'''
+
+            Sin embargo, la provincia en la que tu apellido tiene mayor
+            incidencia es :orange[{province_most_surname_incidence}]
+            *:grey[({incidence_value} de cada 1000 personas)]*
+
+        ''')
+
+
 data_load_state = st.text('Loading data...')
 data = load_data()
-data_load_state.text("Done!")
+data_load_state.text("")
 
 
 if "surname" not in st.session_state:
@@ -52,48 +143,23 @@ else:
 
     if data_item:
 
-        surname_pop_percentage = data_item['n_arg'] * 100 / ARG_TOTAL_POP
 
         st.header(f'Apellido "{target_surname}"')
 
-        col_img, col_txt = st.columns([2, 2])
-        col_img.image(
-            "static/same-surname.jpg",
-            use_column_width='auto')
-        col_txt.markdown(f'''
-            ### Más *{target_surname}*:gray[s]
-
-            ¿Sabías que en el país
-            **:red[hay {data_item['n_arg']:,}] :orange[personas]** :green[que]
-            :blue[también] :violet[se] :gray[llaman] :rainbow[como vos]?
-            :balloon:
-
-
-            Este número, representa el **{surname_pop_percentage:0.2}%**
-            de la población.
-        ''')
-
-        st.markdown("~~~")   
-        col_txt, col_img = st.columns([2, 2])
-        col_txt.markdown(f'''
-            ### Procedencia
-
-            ¿Sabías que tu apellido
-            es de origen **:rainbow[{data_item['origin']}]**?
-
-        ''')
-        col_img.image("static/procedence.jpg")
+        show_surname_n_block(target_surname, data_item['n_arg'])
 
         st.markdown("~~~")
-        _, col_img, col_txt, _ = st.columns([1, 1, 1, 1])
-        col_img.image("static/provinces.jpg")
-        col_txt.markdown(f'''
-            ### Regionalidad
 
-            ¿Sabías que la mayoría de la gente que tiene tu mismo apellido
-            vive en **:blue[{data_item['province_most_people']}]**?
+        show_surname_origin_block(data_item['origin'])
 
-        ''')
+        st.markdown("~~~")
+
+        show_surname_incidence_block(
+            data_item['province_most_people'],
+            data_item['province_most_people_value'],
+            data_item['province_most_surname_incidence'],
+            data_item['province_most_surname_incidence_value'],
+        )
 
         st.markdown("~~~")
 
