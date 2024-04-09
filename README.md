@@ -1,3 +1,3 @@
 # surnames-misc-app
 
-![](surnames-streamlit.jpg)
+![](static/surnames-streamlit.jpg)
